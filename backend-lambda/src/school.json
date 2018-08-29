@@ -1,0 +1,9 @@
+{
+  "name":"sydney boys high school",
+  "location": {
+    "street": "556 Cleveland Street",
+    "suburb": "Moore Park",
+    "state": "New South Wales",
+    "country": "Australia"
+  }
+}

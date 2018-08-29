@@ -1,0 +1,256 @@
+{
+	"info": {
+		"_postman_id": "7615d673-b9c4-44e1-b83e-6af74343cfd8",
+		"name": "Sentral.Activities.RESTFul.API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "208f4e0d-da89-4438-adb9-05de45dcf567",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"status code = 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"response is valid\", () => {",
+							"    pm.expect(response.data).to.be.an('array');",
+							"    response.data.forEach((activity) => {",
+							"        pm.expect(activity).to.be.an('object');",
+							"        pm.expect(activity.location).to.be.an('object');",
+							"    });",
+							"});",
+							"pm.environment.set('firstActivityId', response.data[0]._id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{endpoint}}/activities",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Read",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0475c49e-6d55-4f71-944e-9a95b24a5d41",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "092d0f7f-7673-401a-a2c9-7b13a689407a",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"status code = 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"const firstActivityId = pm.environment.get(\"firstActivityId\");",
+							"",
+							"pm.test(\"response is valid\", () => {",
+							"    pm.expect(response.data).to.be.an('array');",
+							"    pm.expect(response.data[0]).to.be.an('object');",
+							"    pm.expect(response.data[0].location).to.be.an('object');",
+							"    pm.expect(response.data[0]._id).to.equal(firstActivityId);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{endpoint}}/activities/{{firstActivityId}}",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"activities",
+						"{{firstActivityId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cfabcfc4-211c-4269-af57-d1ec698da905",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"status code = 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"response is valid\", () => {",
+							"    pm.expect(response.data).to.be.an('array');",
+							"    pm.expect(response.data[0]).to.be.an('object');",
+							"    pm.expect(response.data[0]._id).to.be.an('string');",
+							"});",
+							"pm.environment.set('createdActivityId', response.data[0]._id);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"name \": \"Australian Museum New\",\n        \"type\": \"type1\",\n        \"date\": \"30/09/2018 15:58\",\n        \"location\": {\n            \"street\": \"1 William St\",\n            \"suburb\": \"Sydney\",\n            \"state\": \"New South Wales\",\n            \"country\": \"Australia\"\n        },\n        \"participants\": [\n            {\n                \"name\": \"Duncan\",\n                \"email\": \"ipsum@Morbi.co.uk\",\n                \"phone\": \"(03) 0852 2900\",\n                \"status\": \"invited\",\n                \"type\": \"organiser\",\n                \"_id\": \"d4867f8dad2d4788af5f1cc47f4a7d77\"\n            },\n            {\n                \"name\": \"Caryn\",\n                \"email\": \"mi.Duis.risus@mauris.net\",\n                \"phone\": \"(03) 7246 5070\",\n                \"status\": \"invited\",\n                \"type\": \"organiser\",\n                \"_id\": \"309d596a6c9e4f7d8475920d349890bc\"\n            },\n            {\n                \"name\": \"Honorato\",\n                \"email\": \"amet.nulla@neque.ca\",\n                \"phone\": \"(05) 2228 0496\",\n                \"status\": \"invited\",\n                \"type\": \"staff\",\n                \"_id\": \"df540f15ec4148289b1e610a2ae53350\"\n            },\n            {\n                \"name\": \"Perry\",\n                \"email\": \"netus@Duisrisusodio.co.uk\",\n                \"phone\": \"(05) 5192 0594\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"b7bf572f1c5f47a5ab8b04859bf12b01\"\n            },\n            {\n                \"name\": \"Yuli\",\n                \"email\": \"adipiscing@porttitorscelerisqueneque.edu\",\n                \"phone\": \"(06) 0702 5551\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"27e12edae07f4a7f85172242f6d4f201\"\n            },\n            {\n                \"name\": \"Travis\",\n                \"email\": \"Curabitur.consequat@pedeCras.org\",\n                \"phone\": \"(07) 7165 7282\",\n                \"status\": \"invited\",\n                \"type\": \"staff\",\n                \"_id\": \"60a47445b3d3487aade60130a03c5365\"\n            },\n            {\n                \"name\": \"Timon\",\n                \"email\": \"ac.libero@sitamet.ca\",\n                \"phone\": \"(07) 9451 9754\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"09aac59e78944319a2467c12b70fdee7\"\n            },\n            {\n                \"name\": \"Hector\",\n                \"email\": \"nisl.elementum.purus@maurissagittis.ca\",\n                \"phone\": \"(04) 9437 7979\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"10ad904c28244b2daed55baf2be1eabc\"\n            },\n            {\n                \"name\": \"Barry\",\n                \"email\": \"blandit@mattisInteger.ca\",\n                \"phone\": \"(08) 8534 1259\",\n                \"status\": \"invited\",\n                \"type\": \"staff\",\n                \"_id\": \"cf827cd169714aaeba9edcb386bdc2c8\"\n            },\n            {\n                \"name\": \"Barrett\",\n                \"email\": \"dolor.dolor.tempus@vehiculaaliquetlibero.ca\",\n                \"phone\": \"(04) 0729 3776\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"853241d6903447e7a99232d05bec2251\"\n            },\n            {\n                \"name\": \"Isaiah\",\n                \"email\": \"amet@justo.ca\",\n                \"phone\": \"(01) 4535 6425\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"f36de6e3798f446cadde882bc87fe119\"\n            },\n            {\n                \"name\": \"Graham\",\n                \"email\": \"ut.mi.Duis@porttitortellusnon.ca\",\n                \"phone\": \"(01) 6912 3760\",\n                \"status\": \"invited\",\n                \"type\": \"staff\",\n                \"_id\": \"a63397f757504a2f8f656e8f7e933e36\"\n            },\n            {\n                \"name\": \"Kevin\",\n                \"email\": \"In.condimentum.Donec@utmolestiein.co.uk\",\n                \"phone\": \"(03) 9179 2792\",\n                \"status\": \"invited\",\n                \"type\": \"volunteer\",\n                \"_id\": \"67359b2ec47f41ec9bd5c85f30ca014e\"\n            },\n            {\n                \"name\": \"Rajah\",\n                \"email\": \"mollis.Integer.tincidunt@Mauris.com\",\n                \"phone\": \"(09) 4044 6882\",\n                \"status\": \"invited\",\n                \"type\": \"volunteer\",\n                \"_id\": \"2ef92dfdecf74b719aa361c58f627908\"\n            },\n            {\n                \"name\": \"Yoshio\",\n                \"email\": \"odio.sagittis@utnullaCras.co.uk\",\n                \"phone\": \"(09) 7204 7606\",\n                \"status\": \"invited\",\n                \"type\": \"parent\",\n                \"_id\": \"5c26841816844aada2bfd49ef529cfe1\"\n            },\n            {\n                \"name\": \"Caleb\",\n                \"email\": \"mauris.sapien@Nulla.org\",\n                \"phone\": \"(09) 9421 0127\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"1d69bcef09df479fb850f70736498890\"\n            },\n            {\n                \"name\": \"Jerome\",\n                \"email\": \"felis.Nulla.tempor@infaucibusorci.edu\",\n                \"phone\": \"(09) 9942 4359\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"2a6e792e8bc64045abf2d92e161553c2\"\n            },\n            {\n                \"name\": \"Christine\",\n                \"email\": \"quis.tristique@ridiculus.ca\",\n                \"phone\": \"(03) 1664 3494\",\n                \"status\": \"invited\",\n                \"type\": \"staff\",\n                \"_id\": \"433db7bbb82b4e5b81ef77fc01cea6d7\"\n            },\n            {\n                \"name\": \"Stephen\",\n                \"email\": \"hendrerit.neque.In@risusQuisquelibero.net\",\n                \"phone\": \"(04) 3060 9469\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"b384b92e5c8447d8a2b49d0fa5153fec\"\n            },\n            {\n                \"name\": \"Buckminster\",\n                \"email\": \"natoque.penatibus@etrisusQuisque.net\",\n                \"phone\": \"(02) 2931 5719\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"b51e6a2ba47742b0aa41945bbd4f3e84\"\n            },\n            {\n                \"name\": \"Cleo\",\n                \"email\": \"tortor@enim.co.uk\",\n                \"phone\": \"(09) 8290 2771\",\n                \"status\": \"invited\",\n                \"type\": \"student\",\n                \"_id\": \"a3080e5a60d344088912fe231a932d3c\"\n            },\n            {\n                \"name\": \"Peter\",\n                \"email\": \"In.lorem.Donec@ipsumcursusvestibulum.org\",\n                \"phone\": \"(09) 9176 6192\",\n                \"status\": \"invited\",\n                \"type\": \"parent\",\n                \"_id\": \"04a2fd86f562453b8c34613752b6cb15\"\n            },\n            {\n                \"name\": \"Hayfa\",\n                \"email\": \"aliquet.diam@Nullaeuneque.edu\",\n                \"phone\": \"(04) 9623 9826\",\n                \"status\": \"invited\",\n                \"type\": \"volunteer\",\n                \"_id\": \"124710ab910a42eb9dfab1a86e9035e1\"\n            }\n        ]\n    }"
+				},
+				"url": {
+					"raw": "{{endpoint}}/activities/",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"activities",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7402fd67-ee5a-4b85-8fec-f6e4cb088827",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"status code = 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"response is valid\", () => {",
+							"    pm.expect(response.data).to.be.an('array');",
+							"    pm.expect(response.data[0]).to.be.an('object');",
+							"    pm.expect(response.data[0]._id).to.be.an('string');",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name \": \"Australian Museum Updated\",\t\n    \"type\": \"type1\",\n    \"date\": \"30/09/2018 15:58\",\n    \"location\": {\n        \"street\": \"1 William St\",\n        \"suburb\": \"Sydney\",\n        \"state\": \"New South Wales\",\n        \"country\": \"Australia\"\n    },\n    \"participants\": [\n        {\n            \"name\": \"Duncan\",\n            \"email\": \"ipsum@Morbi.co.uk\",\n            \"phone\": \"(03) 0852 2900\",\n            \"status\": \"invited\",\n            \"type\": \"organiser\",\n            \"_id\": \"d4867f8dad2d4788af5f1cc47f4a7d77\"\n    },\t\n        {\n            \"name\": \"Caryn\",\n            \"email\": \"mi.Duis.risus@mauris.net\",\n            \"phone\": \"(03) 7246 5070\",\n            \"status\": \"invited\",\n            \"type\": \"organiser\",\n            \"_id\": \"309d596a6c9e4f7d8475920d349890bc\"\n        },\n        {\n            \"name\": \"Honorato\",\n            \"email\": \"amet.nulla@neque.ca\",\n            \"phone\": \"(05) 2228 0496\",\n            \"status\": \"invited\",\n            \"type\": \"staff\",\n            \"_id\": \"df540f15ec4148289b1e610a2ae53350\"\n        },\n        {\n            \"name\": \"Perry\",\n            \"email\": \"netus@Duisrisusodio.co.uk\",\n            \"phone\": \"(05) 5192 0594\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"b7bf572f1c5f47a5ab8b04859bf12b01\"\n        },\n        {\n            \"name\": \"Yuli\",\n            \"email\": \"adipiscing@porttitorscelerisqueneque.edu\",\n            \"phone\": \"(06) 0702 5551\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"27e12edae07f4a7f85172242f6d4f201\"\n        },\n        {\n            \"name\": \"Travis\",\n            \"email\": \"Curabitur.consequat@pedeCras.org\",\n            \"phone\": \"(07) 7165 7282\",\n            \"status\": \"invited\",\n            \"type\": \"staff\",\n            \"_id\": \"60a47445b3d3487aade60130a03c5365\"\n        },\n        {\n            \"name\": \"Timon\",\n            \"email\": \"ac.libero@sitamet.ca\",\n            \"phone\": \"(07) 9451 9754\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"09aac59e78944319a2467c12b70fdee7\"\n        },\n        {\n            \"name\": \"Hector\",\n            \"email\": \"nisl.elementum.purus@maurissagittis.ca\",\n            \"phone\": \"(04) 9437 7979\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"10ad904c28244b2daed55baf2be1eabc\"\n        },\n        {\n            \"name\": \"Barry\",\n            \"email\": \"blandit@mattisInteger.ca\",\n            \"phone\": \"(08) 8534 1259\",\n            \"status\": \"invited\",\n            \"type\": \"staff\",\n            \"_id\": \"cf827cd169714aaeba9edcb386bdc2c8\"\n        },\n        {\n            \"name\": \"Barrett\",\n            \"email\": \"dolor.dolor.tempus@vehiculaaliquetlibero.ca\",\n            \"phone\": \"(04) 0729 3776\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"853241d6903447e7a99232d05bec2251\"\n        },\n        {\n            \"name\": \"Isaiah\",\n            \"email\": \"amet@justo.ca\",\n            \"phone\": \"(01) 4535 6425\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"f36de6e3798f446cadde882bc87fe119\"\n        },\n        {\n            \"name\": \"Graham\",\n            \"email\": \"ut.mi.Duis@porttitortellusnon.ca\",\n            \"phone\": \"(01) 6912 3760\",\n            \"status\": \"invited\",\n            \"type\": \"staff\",\n            \"_id\": \"a63397f757504a2f8f656e8f7e933e36\"\n        },\n        {\n            \"name\": \"Kevin\",\n            \"email\": \"In.condimentum.Donec@utmolestiein.co.uk\",\n            \"phone\": \"(03) 9179 2792\",\n            \"status\": \"invited\",\n            \"type\": \"volunteer\",\n            \"_id\": \"67359b2ec47f41ec9bd5c85f30ca014e\"\n        },\n        {\n            \"name\": \"Rajah\",\n            \"email\": \"mollis.Integer.tincidunt@Mauris.com\",\n            \"phone\": \"(09) 4044 6882\",\n            \"status\": \"invited\",\n            \"type\": \"volunteer\",\n            \"_id\": \"2ef92dfdecf74b719aa361c58f627908\"\n        },\n        {\n            \"name\": \"Yoshio\",\n            \"email\": \"odio.sagittis@utnullaCras.co.uk\",\n            \"phone\": \"(09) 7204 7606\",\n            \"status\": \"invited\",\n            \"type\": \"parent\",\n            \"_id\": \"5c26841816844aada2bfd49ef529cfe1\"\n        },\n        {\n            \"name\": \"Caleb\",\n            \"email\": \"mauris.sapien@Nulla.org\",\n            \"phone\": \"(09) 9421 0127\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"1d69bcef09df479fb850f70736498890\"\n        },\n        {\n            \"name\": \"Jerome\",\n            \"email\": \"felis.Nulla.tempor@infaucibusorci.edu\",\n            \"phone\": \"(09) 9942 4359\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"2a6e792e8bc64045abf2d92e161553c2\"\n        },\n        {\n            \"name\": \"Christine\",\n            \"email\": \"quis.tristique@ridiculus.ca\",\n            \"phone\": \"(03) 1664 3494\",\n            \"status\": \"invited\",\n            \"type\": \"staff\",\n            \"_id\": \"433db7bbb82b4e5b81ef77fc01cea6d7\"\n        },\n        {\n            \"name\": \"Stephen\",\n            \"email\": \"hendrerit.neque.In@risusQuisquelibero.net\",\n            \"phone\": \"(04) 3060 9469\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"b384b92e5c8447d8a2b49d0fa5153fec\"\n        },\n        {\n            \"name\": \"Buckminster\",\n            \"email\": \"natoque.penatibus@etrisusQuisque.net\",\n            \"phone\": \"(02) 2931 5719\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"b51e6a2ba47742b0aa41945bbd4f3e84\"\n        },\n        {\n            \"name\": \"Cleo\",\n            \"email\": \"tortor@enim.co.uk\",\n            \"phone\": \"(09) 8290 2771\",\n            \"status\": \"invited\",\n            \"type\": \"student\",\n            \"_id\": \"a3080e5a60d344088912fe231a932d3c\"\n        },\n        {\n            \"name\": \"Peter\",\n            \"email\": \"In.lorem.Donec@ipsumcursusvestibulum.org\",\n            \"phone\": \"(09) 9176 6192\",\n            \"status\": \"invited\",\n            \"type\": \"parent\",\n            \"_id\": \"04a2fd86f562453b8c34613752b6cb15\"\n        },\n        {\n            \"name\": \"Hayfa\",\n            \"email\": \"aliquet.diam@Nullaeuneque.edu\",\n            \"phone\": \"(04) 9623 9826\",\n            \"status\": \"invited\",\n            \"type\": \"volunteer\",\n            \"_id\": \"124710ab910a42eb9dfab1a86e9035e1\"\n        }\n    ],\n    \"distance\": \"2.9 km\",\n    \"duration\": \"7 mins\",\n    \"_id\": \"cd04900d62f0498f96e7d22bf662089b\"\n}"
+				},
+				"url": {
+					"raw": "{{endpoint}}/activities/{{createdActivityId}}",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"activities",
+						"{{createdActivityId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "04b2af7b-ff5f-4274-9de4-5824f00f4f9f",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"status code = 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const response = pm.response.json();",
+							"const createdActivityId = pm.environment.get('createdActivityId');",
+							"",
+							"pm.test(\"response is valid\", () => {",
+							"    pm.expect(response).to.be.an('object');",
+							"    pm.expect(response.message).to.be.an('string');",
+							"    pm.expect(response.activity).to.equal(createdActivityId);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{endpoint}}/activities/{{createdActivityId}}",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"activities",
+						"{{createdActivityId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
